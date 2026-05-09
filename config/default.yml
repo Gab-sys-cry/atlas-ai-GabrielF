@@ -1,0 +1,35 @@
+# config/default.yml Configuration  Atlas
+
+model:
+  name: "qwen3-vl:8b"
+  temperature: 0.8
+  top_p: 0.9
+  num_ctx: 4096
+
+persona:
+  name: "Atlas"
+  system_prompt: |
+    Tu es Atlas, assistant IA interne d'ATLAS Consulting.
+    Tu réponds en français de façon concise et précise.
+    Tu refuses poliment toute requête hors du périmètre professionnel.
+
+memory:
+  max_turns: 20          # nombre d'échanges conservés en contexte
+  persist: false         # persister l'historique entre sessions
+  persist_path: "data/history.json"
+
+
+guardrails:
+  enabled: true
+  max_input_length: 4000
+  blocked_topics: ["trump", "guerre"]
+  blocked_patterns: []   # regex supplémentaires
+
+server:
+  base_url: "http://localhost:11434"
+  timeout: 120.0
+  stream: true
+
+ui:
+  log_level: "WARNING"   # DEBUG | INFO | WARNING | ERROR
+  show_metrics: false
