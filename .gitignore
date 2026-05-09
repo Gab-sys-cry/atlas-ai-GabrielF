@@ -1,0 +1,98 @@
+# =============================================
+# ATLAS Project - .gitignore
+# =============================================
+
+# Environnements virtuels
+venv/
+env/
+.venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Données persistantes (à ne pas versionner)
+data/
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+*.jsonl
+traces/
+
+# Configuration locale / secrets
+config/*.local.yaml
+config/*.local.yml
+*.env
+.env*
+!.env.example
+
+# Ollama / Modèles (gros fichiers)
+.ollama/
+Modelfile.bak
+
+# IDE / Editeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Tests et coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+
+# Jupyter / Colab
+.ipynb_checkpoints/
+*.ipynb
+
+# ChromaDB (fichiers temporaires)
+chroma.sqlite3
+chroma/
+
+# Scripts temporaires
+*.tmp
+*.temp
+
+# Packaging
+pyproject.toml.bak
+poetry.lock
+uv.lock
+requirements.txt.bak
+
+# Documentation générée
+docs/_build/
+site/
+
+# Autres
+*.bak
+*.backup
