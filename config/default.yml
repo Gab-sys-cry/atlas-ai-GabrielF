@@ -1,7 +1,7 @@
-# config/default.yml Configuration  Atlas
+# config/default.yml -- Configuration applicative Atlas
 
 model:
-  name: "qwen3-vl:8b"
+  name: "qwen3:8b" # ici on met le modèle Ollama installé localement
   temperature: 0.8
   top_p: 0.9
   num_ctx: 4096
@@ -14,16 +14,23 @@ persona:
     Tu refuses poliment toute requête hors du périmètre professionnel.
 
 memory:
-  max_turns: 20          # nombre d'échanges conservés en contexte
-  persist: false         # persister l'historique entre sessions
+  # Mémoire courte (session)
+  max_turns: 20
+  persist: false
   persist_path: "data/history.json"
 
+  # Mémoire longue (inter-sessions, vectorielle)
+  long_term_enabled: true
+  db_path: "data/memory"           # répertoire ChromaDB
+  collection: "conversations"
+  top_k: 5                         # souvenirs max injectés par tour
+  min_similarity: 0.3              # seuil de pertinence (0–1)
 
 guardrails:
   enabled: true
   max_input_length: 4000
   blocked_topics: ["trump", "guerre"]
-  blocked_patterns: []   # regex supplémentaires
+  blocked_patterns: []
 
 server:
   base_url: "http://localhost:11434"
@@ -31,5 +38,5 @@ server:
   stream: true
 
 ui:
-  log_level: "WARNING"   # DEBUG | INFO | WARNING | ERROR
+  log_level: "WARNING"
   show_metrics: false
