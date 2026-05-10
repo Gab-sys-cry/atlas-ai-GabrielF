@@ -1,0 +1,18 @@
+# Installer : pip install -r requirements.txt
+
+# --- Core ---
+httpx==0.28.1
+PyYAML==6.0.3
+pydantic==2.13.4
+pydantic-settings==2.14.1
+python-dotenv==1.2.2
+chromadb==1.5.9
+
+# --- Analyse des traces ---
+pandas==3.0.2
+matplotlib==3.10.9
+rich==15.0.0
+
+# --- Tests ---
+pytest==9.0.3
+respx==0.23.1

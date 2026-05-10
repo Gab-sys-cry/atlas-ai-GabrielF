@@ -1,41 +1,58 @@
-# ATLAS — Assistant IA Local
+# Atlas — Assistant IA on-premise pour ATLAS Consulting
 
-## Objectif du projet
-
-**ATLAS** est un assistant IA 100% local développé pour **ATLAS Consulting**, cabinet de conseil IT.
-
-Face aux contraintes de confidentialité (clients bancaires et santé), cet assistant permet aux consultants de :
-
-- Poser des questions techniques et métier
-- Bénéficier d’une mémoire courte (dans la session) et longue (persistante)
-- Respecter des règles strictes de sécurité et de gouvernance (guardrails)
-- Garder toutes les données sur site (aucun envoi vers OpenAI, Anthropic, etc.)
-
-**Contraintes du projet** : tout doit être codé "from scratch" (pas de LangChain/LlamaIndex), en une journée.
+Atlas est un assistant conversationnel qui tourne entièrement en local, sans envoyer de données vers le cloud.
 
 ---
 
-## 🚀 Comment lancer le projet
+## Ce qu'il fait
 
-### 1. Prérequis
-- Python 3.10+
-- Ollama installé et lancé (`ollama serve`)
-- Modèle recommandé : `llama3.2:3b` ou `qwen2:7b` (selon la RAM)
+- Répond à vos questions professionnelles en français
+- Se souvient du contexte de la conversation en cours
+- Retrouve des informations de sessions précédentes
+- Refuse les sujets hors périmètre (politique, religion…)
+- Masque automatiquement les données sensibles (numéros de CB, emails…)
 
-### 2. Installation
+---
+
+## Démarrage rapide
 
 ```bash
-# 1. Cloner le repo
 git clone https://github.com/Gab-sys-cry/atlas-ai-GabrielF.git
-cd atlas-ai-GabrielF
+cd atlas
+python -m venv venv && venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+.\scripts\setup-atlas.ps1                     # crée le modèle Ollama
+python scripts/atlas_chat.py
+```
 
-# 2. Créer l'environnement virtuel
-python -m venv venv
-venv\Scripts\activate      # Windows
-# source venv/bin/activate  # Linux / Mac
+-> **Guide complet : [SETUP.md](SETUP.md)**
 
-# 3. Installer les dépendances
-pip install -e .
+---
 
-# 4. (Optionnel) Télécharger le modèle
-ollama pull llama3.2:3b
+## Commandes en session
+
+| Commande | Description |
+|---|---|
+| `/memory` | Voir les souvenirs des sessions précédentes |
+| `/forget <sujet>` | Supprimer des souvenirs |
+| `/history` | Historique de la session en cours |
+| `/metrics` | Statistiques de la session |
+| `/help` | Toutes les commandes |
+| `/quit` | Quitter |
+
+---
+
+## Stack technique
+
+- **LLM** : Ollama (modèle local, aucune donnée externe)
+- **Mémoire** : ChromaDB (recherche vectorielle locale)
+- **Config** : YAML + validation Pydantic
+- **Traces** : JSONL (`data/traces.jsonl`)
+
+---
+
+## Prérequis
+
+- Python 3.10+
+- [Ollama](https://ollama.com)
+- 8 GB de RAM minimum (16 GB recommandés)
