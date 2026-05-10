@@ -1,8 +1,5 @@
 """
-atlas/llm.py  Wrapper bas niveau pour l'API Ollama.
-
-Utilise uniquement httpx.
-Toute configuration (modèle, timeout, url) vient de config/default.yml.
+atlas/llm.py -- Wrapper bas niveau pour l'API Ollama.
 """
 from __future__ import annotations
 
@@ -15,21 +12,13 @@ class OllamaError(Exception):
     """Erreur levée lors d'un appel à l'API Ollama."""
 
 
+# Type de retour de chat()
+ChatResult = dict  # {"response": str, "prompt_tokens": int, "completion_tokens": int}
+
+
 class OllamaClient:
     """
     Client HTTP direct vers Ollama (/api/chat).
-
-    Tous les paramètres sont obligatoires : les valeurs par défaut
-    sont définies une seule fois dans config/default.yml.
-
-    Paramètres
-    ----------
-    base_url : str
-        URL de base du serveur Ollama.
-    model : str
-        Nom du modèle tel que retourné par /api/tags.
-    timeout : float
-        Timeout en secondes pour chaque requête HTTP.
     """
 
     def __init__(
@@ -38,25 +27,21 @@ class OllamaClient:
         model: str,
         timeout: float,
     ) -> None:
-        self.base_url = base_url.rstrip("/") # rstrip pour éviter les doubles slash
+        self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout = timeout
         self._client = httpx.Client(timeout=timeout)
 
-
-    # Mthodes publiques
+    # Méthodes publiques
 
     def chat(
         self,
         messages: list[dict],
         stream: bool = True,
         options: dict | None = None,
-    ) -> str:
+    ) -> ChatResult:
         """
-        Envoie un historique de messages et retourne la réponse complète.
-
-        En mode streaming, print chaque token dès réception et renvoie
-        la chaîne complète à la fin.
+        Envoie un historique de messages et retourne un dict :
         """
         payload = {
             "model": self.model,
@@ -64,7 +49,6 @@ class OllamaClient:
             "stream": stream,
             "options": options or {},
         }
-
         url = f"{self.base_url}/api/chat"
 
         try:
@@ -74,7 +58,7 @@ class OllamaClient:
                 return self._blocking_chat(url, payload)
         except httpx.TimeoutException as exc:
             raise OllamaError(
-                f"Timeout ({self.timeout}s) atteint, serveur trop lent ou modèle trop lourd."
+                f"Timeout ({self.timeout}s) atteint -- serveur trop lent ou modèle trop lourd."
             ) from exc
         except httpx.ConnectError as exc:
             raise OllamaError(
@@ -99,11 +83,16 @@ class OllamaClient:
         except httpx.HTTPError:
             return False
 
-    # Méthodes privées
-
-    def _stream_chat(self, url: str, payload: dict) -> str:
-        """Streaming NDJSON : chaque ligne est un objet JSON partiel.""" # NDJSON = Newline Delimited JSON
+    # Méthodes internes
+    
+    def _stream_chat(self, url: str, payload: dict) -> ChatResult:
+        """
+        Streaming NDJSON.
+        Le dernier chunk (done=True) contient prompt_eval_count et eval_count.
+        """
         full_response = ""
+        prompt_tokens = 0
+        completion_tokens = 0
 
         with self._client.stream("POST", url, json=payload) as response:
             response.raise_for_status()
@@ -117,21 +106,32 @@ class OllamaClient:
 
                 token = chunk.get("message", {}).get("content", "")
                 if token:
-                    print(token, end="", flush=True) # flush pour forcer l'affichage immédiat
+                    print(token, end="", flush=True)
                     full_response += token
 
                 if chunk.get("done", False):
+                    # Le chunk final contient les compteurs de tokens
+                    prompt_tokens     = chunk.get("prompt_eval_count", 0)
+                    completion_tokens = chunk.get("eval_count", 0)
                     break
 
         print()  # saut de ligne final
-        return full_response
+        return {
+            "response":          full_response,
+            "prompt_tokens":     prompt_tokens,
+            "completion_tokens": completion_tokens,
+        }
 
-    def _blocking_chat(self, url: str, payload: dict) -> str:
+    def _blocking_chat(self, url: str, payload: dict) -> ChatResult:
         """Appel bloquant sans streaming."""
         response = self._client.post(url, json=payload)
         response.raise_for_status()
         data = response.json()
-        return data.get("message", {}).get("content", "")
+        return {
+            "response":          data.get("message", {}).get("content", ""),
+            "prompt_tokens":     data.get("prompt_eval_count", 0),
+            "completion_tokens": data.get("eval_count", 0),
+        }
 
     def __del__(self) -> None:
         try:
