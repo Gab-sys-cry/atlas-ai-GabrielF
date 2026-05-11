@@ -105,6 +105,13 @@ ollama create atlas -f Modelfile
 ollama list   # atlas doit apparaître
 ```
 
+Si config faite à la main, alors lancer le script de cette maniere : 
+
+```bash
+python scripts/atlas_chat.py --config config/default.yml
+```
+et modifier le default.yml
+
 ---
 
 ## 5. Vérifier l'installation
