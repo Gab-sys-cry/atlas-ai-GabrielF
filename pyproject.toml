@@ -8,7 +8,6 @@ version = "0.1.0"
 description = "Prototype d'assistant IA 100% on-premise pour ATLAS Consulting"
 readme = "README.md"
 requires-python = ">=3.10"
-
 dependencies = [
     "httpx>=0.28",
     "pyyaml>=6.0",
@@ -21,6 +20,9 @@ dependencies = [
     "rich>=15.0",
 ]
 
+[project.scripts]
+atlas-chat = "scripts.atlas_chat:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=9.0",
@@ -30,16 +32,9 @@ dev = [
     "pytest-asyncio",
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["atlas*"]
+
 [tool.setuptools]
-packages = ["atlas"]
-
-[project.scripts]
-atlas-chat = "scripts.atlas_chat:main"
-
-[tool.ruff]
-line-length = 100
-select = ["E", "F", "I", "UP"]
-
-[tool.mypy]
-python_version = "3.10"
-strict = true
+package-dir = {"" = "."}

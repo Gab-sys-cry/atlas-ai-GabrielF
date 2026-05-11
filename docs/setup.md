@@ -23,7 +23,7 @@ ollama --version
 
 ```bash
 git clone https://github.com/Gab-sys-cry/atlas-ai-GabrielF.git
-cd atlas-ai
+cd atlas-ai-GabrielF/
 ```
 
 ---
@@ -141,25 +141,24 @@ python scripts/atlas_chat.py --config config/default.yml
 
 ```
 atlas-ai/
-├── atlas/              # Package Python principal
-│   ├── config.py       # Schéma Pydantic (validation de la config)
-│   ├── llm.py          # Client Ollama
-│   ├── memory.py       # Mémoire courte et longue
-│   ├── monitoring.py   # Traces JSONL
-│   └── guardrails.py   # Filtres et sécurité
+├── atlas/                  # Package principal
+│   ├── config.py
+│   ├── llm.py
+│   ├── memory.py
+│   ├── monitoring.py
+│   └── guardrails.py
 ├── scripts/
-│   ├── atlas_chat.py       # Point d'entrée CLI
-│   ├── analyze_traces.py   # Analyse des logs
-│   ├── setup-atlas.ps1     # Setup Windows
-│   └── setup-atlas.sh      # Setup macOS/Linux
+│   ├── atlas_chat.py
+│   ├── analyze_traces.py
+│   ├── setup-atlas.ps1
+│   └── setup-atlas.sh
 ├── config/
-│   ├── atlas.yml       # Profil production
-│   └── default.yml     # Profil développement
-├── docs/
-│   └── architecture.md # Décisions techniques
-├── Modelfile           # Définition du modèle Ollama
+│   ├── atlas.yml
+│   └── default.yml
+├── pyproject.toml
 ├── requirements.txt
-└── pyproject.toml
+├── Modelfile
+└── venv/
 ```
 
 ---
