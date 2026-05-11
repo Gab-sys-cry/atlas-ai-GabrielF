@@ -16,16 +16,39 @@ Atlas est un assistant conversationnel qui tourne entièrement en local, sans en
 
 ## Démarrage rapide
 
+## Démarrage rapide
+
 ```bash
 git clone https://github.com/Gab-sys-cry/atlas-ai-GabrielF.git
-cd atlas
-python -m venv venv && venv\Scripts\activate  # Windows
-pip install -r requirements.txt
-.\scripts\setup-atlas.ps1                     # crée le modèle Ollama
-python scripts/atlas_chat.py
+cd atlas-ai-GabrielF
+
+# Windows (PowerShell)
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# macOS / Linux
+python3 -m venv venv
+source venv/bin/activate
+
+# Windows
+.\scripts\setup-atlas.ps1
+
+# macOS / Linux
+bash scripts/setup-atlas.sh
 ```
 
--> **Guide complet : [SETUP.md](SETUP.md)**
+## Ces scripts automatisent tout :
+
+- Détection de la RAM installée
+- Choix intelligent du modèle Ollama selon votre matériel (qwen3:8b, qwen3:4b ou gemma3:1b)
+- Téléchargement du modèle de base via ollama pull
+- Création du Modelfile avec le prompt système Atlas
+- Création du modèle optimisé atlas
+- Création de l’environnement virtuel (venv) si nécessaire
+- Installation du projet en mode éditable (pip install -e .)
+- Mise à jour de pip
+
+-> **Guide complet : [SETUP.md](docs/setup.md)**
 
 ---
 
