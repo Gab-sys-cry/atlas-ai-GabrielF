@@ -63,6 +63,12 @@ bash scripts/setup-atlas.sh
 | `/help` | Toutes les commandes |
 | `/quit` | Quitter |
 
+## Afficher les arguments possibles
+```bash
+atlas-chat --help
+--- 
+py atlas_chat.py --help
+```
 ---
 
 ## Stack technique
