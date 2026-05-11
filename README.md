@@ -16,8 +16,6 @@ Atlas est un assistant conversationnel qui tourne entièrement en local, sans en
 
 ## Démarrage rapide
 
-## Démarrage rapide
-
 ```bash
 git clone https://github.com/Gab-sys-cry/atlas-ai-GabrielF.git
 cd atlas-ai-GabrielF
@@ -63,6 +61,12 @@ bash scripts/setup-atlas.sh
 | `/help` | Toutes les commandes |
 | `/quit` | Quitter |
 
+## Afficher les arguments possibles
+```bash
+atlas-chat --help
+--- 
+py atlas_chat.py --help
+```
 ---
 
 ## Stack technique
